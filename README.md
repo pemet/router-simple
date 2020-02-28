@@ -1,4 +1,4 @@
-# Simple router config for RHEL/CentOS 8.x
+# Simple router config for RHEL 8.x / CentOS 8.x
 
 This repository contains configuration for a simple natting IPv4
 router, using [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
@@ -55,9 +55,9 @@ force you to check your config.
   above file has options `IPV6INIT=no` and `IPV6_AUTOCONF=no`.  But
   that doesn't really matter.
 
-* The `network-scripts/ifcfg-eth1` file not synced to NetworkManager
-  in real time.  If ones makes changes, the command `nmcli reload
-  eth1` will activate them.
+* The `network-scripts/ifcfg-eth1` file is not synced to
+  NetworkManager in real time.  If ones makes changes, the command
+  `nmcli reload eth1` will activate them.
 
 ## Masquerading NAT
 
@@ -68,8 +68,9 @@ force you to check your config.
   `sudo sysctl -p`
 
 * Copy the file `ipv4_nat_fw.nft` to `/etc/nftables/ipv4_nat_fw.nft`
-  (owned by `root:root` and rw permissions for 'root' only, like the
-  other files in the same directory).
+  (owned by `root:root` and rw permissions for `root` only, like the
+  other files in the same directory).  Ensure the correct SEcontext saying\
+  `sudo chcon system_u:object_r:etc_t:s0 /etc/nftables/ipv4_nat_fw.nft`
 
 * Edit the file `/etc/sysconfig/nftables.conf` by adding the line\
   `include "/etc/nftables/ipv4_nat_fw.nft"`
