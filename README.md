@@ -48,13 +48,16 @@ force you to check your config.
 
 * Edit the file `/etc/sysconfig/network-scripts/ifcfg-eth1` and
   replace the line `ONBOOT=no` by `ONBOOT=yes`, otherwise your `eth1`
-  will not get up on the next boot.
+  will not get up on the next boot. N.B. `eth1` here is not `eth1` in
+  your machine!
 
 * Since we are making an IPv4 router, a purist might also ensure the
   above file has options `IPV6INIT=no` and `IPV6_AUTOCONF=no`.  But
-  that doesn't really matter.  The file is not synced to
-  NetworkManager in real time.  If ones makes changes, the command
-  `nmcli reload eth1` will activate them.
+  that doesn't really matter.
+
+* The `network-scripts/ifcfg-eth1` file not synced to NetworkManager
+  in real time.  If ones makes changes, the command `nmcli reload
+  eth1` will activate them.
 
 ## Masquerading NAT
 
@@ -62,13 +65,14 @@ force you to check your config.
   `net.ipv4.ip_forward=1` and give it the correct SEcontext by
   `sudo chcon system_u:object_r:etc_t:s0 /etc/sysctl.d/99-router.conf`\
   The file should be owned by `root:root`.  Activate it by running
-  `sudo sysctl -p`.
+  `sudo sysctl -p`
 
-* Copy the file `ipv4_nat_fw.nft` to ´/etc/nftables/ipv4_nat_fw.nft`
-  (owned by `root:root` and rw permissions for 'root' only).
+* Copy the file `ipv4_nat_fw.nft` to `/etc/nftables/ipv4_nat_fw.nft`
+  (owned by `root:root` and rw permissions for 'root' only, like the
+  other files in the same directory).
 
-* Edit the file `/etc/sysconfig/nftables.conf` bu adding the line\
-  `include "/etc/nftables/ipv4_nat_fw.nft"`.
+* Edit the file `/etc/sysconfig/nftables.conf` by adding the line\
+  `include "/etc/nftables/ipv4_nat_fw.nft"`
 
 * Disable firewalld and start nftables by\
   `sudo systemctl stop firewalld; sudo systemctl start nftables`\
@@ -82,7 +86,7 @@ force you to check your config.
 
 * In order to have working LAN, you need DNS server and DHCP service
   for it.  This is done by `dnsmasq`.  So, install now `dnsmasq` by
-  `sudo yum install dnsmasq`.
+  `sudo yum install dnsmasq`
 
 * Edit the `dhcp-host` lines of the dnsmasq.conf example file to
   resemble your LAN, and copy the file to `/etc/dnsmasq.conf`.  It
