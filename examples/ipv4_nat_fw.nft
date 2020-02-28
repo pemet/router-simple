@@ -1,0 +1,67 @@
+#!/usr/sbin/nft -f
+# (c) 2020 Pekko Metsä <pekko.metsa@helsinki.fi>
+# License: GPLv3 or any later
+
+# Remember "sysctl -w net.ipv4.ip_forward=1", see /etc/sysctl.d/99-router.conf
+
+flush ruleset
+
+# Please edit your device names here
+define WAN = eth0
+define LAN = eth1
+
+table inet wanfilter {
+      chain input {
+      	    # The policy: accept only named things, drop everything else.
+      	    type filter hook input priority 0; policy drop;
+
+	    # early drop of invalid connections
+	    ct state invalid drop comment "Drop invalid connections"
+	    # allow established/related connections
+	    ct state established,related accept comment "Accept traffic originated from us"
+	    # allow from loopback
+	    iif lo accept comment "Accept any localhost traffic"
+	    # Allow from internal network
+	    iifname $LAN accept
+	    # Accept ssh from certain addresses (PLEASE EDIT!), and ping from anywhere
+	    #tcp dport ssh ip saddr 86.50.0.0/16 accept comment "SSH in"
+	    #tcp dport ssh ip saddr 86.50.165.196 accept comment "SSH in from mahti.csc.fi"
+	    #tcp dport ssh ip saddr 86.50.164.166 accept comment "SSH in from puhti.csc.fi"
+	    ip protocol icmp accept comment "Accept ping"
+	    tcp dport ssh log drop comment "Illegal SSH in!"
+	    #udp dport mdns accept
+
+	    reject
+      }
+
+      chain forward {
+      	    type filter hook forward priority 0; policy accept;
+
+	    # Allow outgoing via wan0
+	    oifname $WAN accept
+
+	    # Allow incoming on wan0 for related & established connections
+	    iifname $WAN ct state related, established accept
+
+	    # Drop any other incoming traffic on wan0
+	    iifname $WAN drop
+      }
+
+      chain output {
+      	    # This simple firewall doesn't filter output chain.
+      	    type filter hook output priority 0; policy accept;
+      }
+}
+
+# NAT
+table ip nat {
+      chain prerouting {
+      	    type nat hook prerouting priority 0; policy accept;
+      }
+
+      # for all packets to WAN, after routing, replace source address with primary IP of WAN interface
+      chain postrouting {
+      	    type nat hook postrouting priority 0; policy accept;
+	    	 oifname $WAN masquerade
+      }
+}

@@ -1,0 +1,19 @@
+# This may be more clear, if you need to fast check the options
+domain-needed
+bogus-priv
+local=/home.localnet/
+user=dnsmasq
+group=dnsmasq
+interface=eth1
+expand-hosts
+domain = home.localnet, 192.168.1.0/24
+dhcp-range = set:eth1, 192.168.1.2, 192.168.1.254, 24h
+dhcp-host = b8:27:eb:0e:37:c0, 192.168.1.2 # rpi1.home.localnet
+dhcp-host = b8:27:eb:0e:37:c1, 192.168.1.3 # rpi2.home.localnet
+dhcp-host = b8:27:eb:0e:37:c2, 192.168.1.4 # rpi3.home.localnet
+dhcp-option = tag:eth1, option:router, 192.168.1.1
+dhcp-option = tag:eth1, option:domain-name, home.localnet
+dhcp-option = option:dns-server, 192.168.1.1
+dhcp-option-force = 26,1500
+cache-size=10240
+conf-dir=/etc/dnsmasq.d,.rpmnew,.rpmsave,.rpmorig
