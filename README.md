@@ -40,8 +40,8 @@ still unconfigured.  By default, CentOS does not use the old style
 force you to check your configuration.
 
 * Use commands\
-  `sudo nmcli connection modify enp6s0 ipv4.method manual`\
-  `sudo nmcli connection modify enp6s0 ipv4.address "192.168.1.1/24"`\
+  `sudo nmcli connection modify eth1 ipv4.method manual`\
+  `sudo nmcli connection modify eth1 ipv4.address "192.168.1.1/24"`\
   `sudo nmcli connection up eth1`\
   to configure the LAN device.  `nmcli` will alter the NetworkManager
   config, so the new config will survive the reboot.
