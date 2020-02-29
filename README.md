@@ -7,8 +7,8 @@ and [nftables](https://wiki.nftables.org/).
 ## Philosophy
 
 Keep it simple.  The aim is to offer as simple config as reasonable,
-which one can use as the base of her own development.  Firewalld is
-not used, because it is not easy to understand.  Forwarding and
+which one can then use as the base of her own development.  Firewalld
+is not used, because it is not easy to understand.  Forwarding and
 firewall are made by nftables instead.  The instructions are given as
 a recipe with newbie friendly tone.
 
@@ -75,7 +75,7 @@ force you to check your configuration.
 * Edit the file `/etc/sysconfig/nftables.conf` by adding the line\
   `include "/etc/nftables/ipv4_nat_fw.nft"`
 
-* Disable firewalld and start nftables by\
+* Stop firewalld and start nftables by\
   `sudo systemctl stop firewalld; sudo systemctl start nftables`\
   Now you can check whether command\
   `sudo nft list ruleset`\
@@ -110,6 +110,6 @@ force you to check your configuration.
   port and prevents `dnsmasq` from starting.  If you really want to
   run libvirtd in your router, please configure it to bind to its own
   dedicated interface only.  If something prevents `dnsmasq` from
-  starting, you may found e.g. command\
+  starting, you may find e.g. command\
   `netstat -tulpn | grep LISTEN`\
   useful when searching for the conflict.
