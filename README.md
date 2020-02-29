@@ -36,8 +36,8 @@ systemd configuration from command line.
 Assuming `eth0` as the WAN device and `eth1` the LAN (local network)
 device.  `eth0` should be working and configured already, and `eth1`
 still unconfigured.  By default, CentOS does not use the old style
-`ethX` names anymore.  The naming here was choosed intentionally to
-force you to check your config.
+`ethX` names anymore.  The naming here was intentionally chosen to
+force you to check your configuration.
 
 * Use commands\
   `sudo nmcli connection modify enp6s0 ipv4.method manual`\
@@ -90,9 +90,9 @@ force you to check your config.
   `sudo yum install dnsmasq`
 
 * Edit the `dhcp-host` lines of the dnsmasq.conf example file to
-  resemble your LAN, and copy the file to `/etc/dnsmasq.conf`.  It
-  should be owned by `root:dnsmasq`, and to ensure the correct
-  SEcontext, type\
+  resemble your LAN, and copy the file to `/etc/dnsmasq.conf`.  In
+  particular, all `eth1` strings must be replaced.  It should be owned
+  by `root:dnsmasq`, and to ensure the correct SEcontext, type\
   `sudo chcon system_u:object_r:dnsmasq_etc_t:s0 /etc/dnsmasq.conf`
 
 * Give the IP-address to name mapping of your LAN machines in
@@ -109,7 +109,7 @@ force you to check your config.
   first, because in the default config in CentOS 8.1 it reserves the
   port and prevents `dnsmasq` from starting.  If you really want to
   run libvirtd in your router, please configure it to bind to its own
-  dedicate interface only.  If something prevents `dnsmasq` from
+  dedicated interface only.  If something prevents `dnsmasq` from
   starting, you may found e.g. command\
   `netstat -tulpn | grep LISTEN`\
   useful when searching for the conflict.
