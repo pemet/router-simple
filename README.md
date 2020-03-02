@@ -55,9 +55,9 @@ force you to check your configuration.
   above file has options `IPV6INIT=no` and `IPV6_AUTOCONF=no`.  But
   that doesn't really matter.
 
-* The `network-scripts/ifcfg-eth1` file is not synced to
+* The `network-scripts/ifcfg-*` files are not synced to
   NetworkManager in real time.  If ones makes changes, the command
-  `nmcli reload eth1` will activate them.
+  `sudo nmcli connection reload` will activate them.
 
 ## Masquerading NAT
 
@@ -95,7 +95,7 @@ force you to check your configuration.
   by `root:dnsmasq`, and to ensure the correct SEcontext, type\
   `sudo chcon system_u:object_r:dnsmasq_etc_t:s0 /etc/dnsmasq.conf`
 
-* Give the IP-address to name mapping of your LAN machines in
+* Give the 'IP-address to name' mapping of your LAN machines in
   `/etc/hosts` using lines like\
   `192.168.1.2 machine1.home.localnet machine1`
 
